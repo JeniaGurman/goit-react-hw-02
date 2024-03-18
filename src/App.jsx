@@ -1,28 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import Feedback from "./componets/Feedback/Feedback";
+import Options from "./componets/Options/Options";
+import Description from "./componets/Description/Description";
+import Notification from "./componets/Notification/Notification";
 
-function App() {
-  const [count, setCount] = useState(0)
+const feedbackValues = { good: 0, neutral: 0, bad: 0 };
+const STORAGE_KEY = "feedback";
+
+const App = () => {
+  const [values, setValues] = useState(() => {
+    const stringifiValues = localStorage.getItem(STORAGE_KEY);
+    const parseValues = JSON.parse(stringifiValues) || feedbackValues;
+    return parseValues;
+  });
+
+  const updateFeedback = (feedbackType) => {
+    setValues({
+      ...values,
+      [feedbackType]: values[feedbackType] + 1,
+    });
+  };
+  const totalFeedback = values.good + values.neutral + values.bad;
+  const positiveFeedback = Math.round(
+    ((values.good + values.neutral) / totalFeedback) * 100
+  );
+
+  const handleResetClick = () => {
+    setValues(feedbackValues);
+  };
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+  }, [values]);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Description />
+      <Options
+        updateFeedback={updateFeedback}
+        totalFeedback={totalFeedback}
+        handleResetClick={handleResetClick}
+      />
+      {totalFeedback === 0 ? (
+        <Notification />
+      ) : (
+        <Feedback
+          values={values}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
+        />
+      )}
     </>
-  )
-}
+  );
+};
 
-export default App
+export default App;
