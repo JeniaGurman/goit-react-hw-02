@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Feedback from "./componets/Feedback/Feedback";
-import Options from "./componets/Options/Options";
-import Description from "./componets/Description/Description";
-import Notification from "./componets/Notification/Notification";
+import Feedback from "./Feedback/Feedback";
+import Options from "./components/Options";
+import Description from "./components/Description/Description";
+import Notification from "./components/Notification/Notification";
 
 const feedbackValues = { good: 0, neutral: 0, bad: 0 };
 const STORAGE_KEY = "feedback";
