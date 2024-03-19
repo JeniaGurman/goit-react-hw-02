@@ -6,7 +6,6 @@ const Options = ({ updateFeedback, totalFeedback, handleResetClick }) => {
       <button className={styles.btn} onClick={() => updateFeedback("good")}>
         Good
       </button>
-
       <button className={styles.btn} onClick={() => updateFeedback("neutral")}>
         Neutral
       </button>
